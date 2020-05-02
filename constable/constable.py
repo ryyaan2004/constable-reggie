@@ -6,7 +6,6 @@ from flask import Flask
 
 app = Flask(__name__)
 
-time_limit = datetime.datetime.now() - datetime.timedelta(minutes=15)
 bot_username = os.environ.get('BOT_USERNAME')
 bot_client_id = os.environ.get('BOT_CLIENT_ID')
 bot_client_secret = os.environ.get('BOT_CLIENT_SECRET')
@@ -26,6 +25,7 @@ user_list = user_string.split(',')
 
 @app.route("/")
 def run():
+    time_limit = datetime.datetime.now() - datetime.timedelta(minutes=15)
     slack_client = slack.WebClient(token=slack_token)
     reddit = praw.Reddit(username=bot_username,
                          client_secret=bot_client_secret,

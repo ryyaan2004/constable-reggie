@@ -25,7 +25,7 @@ user_list = user_string.split(',')
 
 @app.route("/")
 def run():
-    time_limit = datetime.datetime.now() - datetime.timedelta(minutes=15)
+    time_limit = datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
     slack_client = slack.WebClient(token=slack_token)
     reddit = praw.Reddit(username=bot_username,
                          client_secret=bot_client_secret,
@@ -36,7 +36,8 @@ def run():
         posts = {}
         for submission in redditor.submissions.new(limit=100):
             if submission.over_18:
-                if datetime.datetime.fromtimestamp(submission.created) > time_limit:
+                created = datetime.datetime.utcfromtimestamp(submission.created_utc)
+                if created > time_limit:
                     # check if posts contains last piece of permalink, true=ignore, false=insert
                     if submission.title not in posts.keys():
                         posts[submission.title] = 'https://reddit.com{}'.format(submission.permalink)

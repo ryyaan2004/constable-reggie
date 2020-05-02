@@ -9,8 +9,8 @@ verify_ssl = true
 flask = '*'
 requests = '==2.22.0'
 slackclient = '==2.5.0'
-praw = '*'
-slack = '*'
+praw = '>=7.0'
 
 [requires]
 python_version = "3.6"
+

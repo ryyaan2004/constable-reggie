@@ -33,11 +33,18 @@ def run():
                          user_agent='Constable Reggie v0.0.1')
     for user in user_list:
         redditor = reddit.redditor(user)
+        posts = {}
         for submission in redditor.submissions.new(limit=100):
             if submission.over_18:
                 if datetime.datetime.fromtimestamp(submission.created) > time_limit:
-                    slack_client.chat_postMessage(channel=slack_channel,
-                                                  text='https://reddit.com{}'.format(submission.permalink))
+                    # check if posts contains last piece of permalink, true=ignore, false=insert
+                    if submission.title not in posts.keys():
+                        posts[submission.title] = 'https://reddit.com{}'.format(submission.permalink)
+        # post posts{} to slack
+        if len(posts) > 0:
+            message = 'https://reddit.com/user/{user}\n```{posts}```'
+            slack_client.chat_postMessage(channel=slack_channel,
+                                          text=message.format(user=user, posts='\n'.join(posts.values())))
 
 
 if __name__ == '__main__':

@@ -45,6 +45,7 @@ def run():
             message = 'https://reddit.com/user/{user}\n```{posts}```'
             slack_client.chat_postMessage(channel=slack_channel,
                                           text=message.format(user=user, posts='\n'.join(posts.values())))
+    return "OK"
 
 
 if __name__ == '__main__':
